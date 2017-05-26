@@ -1568,3 +1568,18 @@
                || Name <- EnabledPlugins ],
          lists:keysort(1, Plugins)
  end}.
+
+%% @doc The meta (VerneMQ Subscriptions and Retained Messages) storage backend.
+{mapping, "meta_store_backend", "vmq_server.meta_store_backend", [
+                                                                    {default, plumtree},
+                                                                    {datatype, atom}
+                                                                  ]}.
+
+{translation, "vmq_server.vmq_server.meta_store_backend",
+  fun(Conf) ->
+          case cuttlefish:conf_get("meta_store_backend", Conf) of
+              plumtree -> plumtree;
+              redis -> redis;
+              _ -> cuttlefish:invalid("meta_store_backend must be either 'plumtree' or 'redis'!")
+          end
+  end}.
