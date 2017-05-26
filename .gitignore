@@ -12,3 +12,7 @@ distdir
 package
 .ropeproject
 *~
+# IDE and editor ignores
+.idea/
+*.iml
+*.swp
