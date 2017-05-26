@@ -1443,12 +1443,6 @@
                                                                             hidden
                                                                            ]}.
 
-{mapping, "plumtree.directory", "plumtree.plumtree_data_dir", [
-                                             {default, "{{platform_data_dir}}/meta"},
-                                             {datatype, directory},
-                                             hidden
-                                            ]}.
-
 %% the setup utility will call hooks to create the default directories,
 %% however the setup defaults e.g. data.<nodename> are not matching with our 
 %% defaults, so we need to override them.
@@ -1583,3 +1577,35 @@
               _ -> cuttlefish:invalid("meta_store_backend must be either 'plumtree' or 'redis'!")
           end
   end}.
+
+@doc The directory where the plumtree data is stored.
+{mapping, "plumtree.directory", "plumtree.plumtree_data_dir", [
+                                             {default, "{{platform_data_dir}}/meta"},
+                                             {datatype, directory},
+                                             hidden
+                                            ]}.
+
+{mapping, "meta_store.redis.host", "vmq_server.meta_store.redis.host",
+ [{datatype, string},
+  {default, "localhost"},
+  {commented, "localhost"}]}.
+
+{mapping, "meta_store.redis.port", "vmq_server.meta_store.redis.port",
+ [{datatype, integer},
+  {default, 6379},
+  {commented, 6379}]}.
+
+{mapping, "meta_store.redis.password", "vmq_server.meta_store.redis.password",
+ [{datatype, string},
+  {default, ""},
+  {commented, ""}]}.
+
+{mapping, "meta_store.redis.database", "vmq_server.meta_store.redis.database",
+ [{datatype, integer},
+  {default, 0},
+  {commented, 0}]}.
+
+{mapping, "meta_store.redis.pool_size", "vmq_server.meta_store.redis.pool_size",
+ [{datatype, integer},
+  {default, 5},
+  hidden]}.
