@@ -1,17 +1,15 @@
 language: erlang
+sudo: required
 matrix:
   include:
     - os: linux
       dist: trusty
-      sudo: required
       otp_release: 18.3
     - os: linux
       dist: trusty
-      sudo: required
       otp_release: 19.3
     - os: linux
       dist: trusty
-      sudo: required
       otp_release: 20.0
     - os: osx
       osx_image: xcode9
@@ -28,16 +26,19 @@ before_install:
     - |
       if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
         brew update
-        brew install wget mysql erlang
+        brew install erlang
         brew outdated openssl || brew upgrade openssl || brew link openssl
         brew outdated cmake || brew upgrade cmake
       fi
-    - mysql -e "CREATE DATABASE vmq_test_database;" -uroot
-    - mysql -e "CREATE USER 'vmq_test_user' IDENTIFIED BY 'vmq_test_password';" -uroot
-    - mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'vmq_test_user';" -uroot
-    - psql -c "CREATE DATABASE vmq_test_database;" -U postgres
-    - psql -c "CREATE USER vmq_test_user WITH PASSWORD 'vmq_test_password';" -U postgres
-    - psql -c "GRANT ALL PRIVILEGES ON DATABASE vmq_test_database to vmq_test_user;" -U postgres
+    - |
+      if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then 
+       mysql -e "CREATE DATABASE vmq_test_database;" -uroot
+       mysql -e "CREATE USER 'vmq_test_user' IDENTIFIED BY 'vmq_test_password';" -uroot
+       mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'vmq_test_user';" -uroot
+       psql -c "CREATE DATABASE vmq_test_database;" -U postgres
+       psql -c "CREATE USER vmq_test_user WITH PASSWORD 'vmq_test_password';" -U postgres
+       psql -c "GRANT ALL PRIVILEGES ON DATABASE vmq_test_database to vmq_test_user;" -U postgres  
+      fi  
 
 before_script: "epmd -daemon"
 script: "./rebar3 as all_tests do eunit, ct"
