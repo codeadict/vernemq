@@ -3,7 +3,7 @@ CFLAGS_EXTRA =
 
 
 ifeq ($(shell uname -s), Darwin)
-	OPENSSL_PATH = $(shell which openssl)/../..
+	OPENSSL_PATH = =$(shell brew --prefix openssl)
 	CFLAGS_EXTRA += -L$(OPENSSL_PATH)/lib -I$(OPENSSL_PATH)/include
 endif
 
