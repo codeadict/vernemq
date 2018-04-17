@@ -1,16 +1,30 @@
 os:
   - linux
   - osx
-sudo: required
-dist: trusty
-osx_image: xcode9
+sudo: false
+language: erlang
+install: true
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      otp_release:
+        - 18.3
+        - 19.3
+        - 20.0
+    - os: osx
+      osx_image: xcode9
+      otp_release:
+        - 19.0
 
 services:
     - mysql
     - postgresql
     - mongodb
     - redis
-    - memcached
+    - memcached 
 
 before_install:
     - |
@@ -27,11 +41,5 @@ before_install:
     - psql -c "CREATE USER vmq_test_user WITH PASSWORD 'vmq_test_password';" -U postgres
     - psql -c "GRANT ALL PRIVILEGES ON DATABASE vmq_test_database to vmq_test_user;" -U postgres
 
-language: erlang
-install: true
-otp_release:
-    - 18.3
-    - 19.3
-    - 20.0
 before_script: "epmd -daemon"
 script: "./rebar3 as all_tests do eunit, ct"
