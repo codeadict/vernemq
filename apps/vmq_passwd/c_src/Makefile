@@ -1,11 +1,13 @@
 CC? = gcc
 CFLAGS_EXTRA =
 
-
 ifeq ($(shell uname -s), Darwin)
-	OPENSSL_PATH = =$(shell brew --prefix openssl)
-	CFLAGS_EXTRA += -L$(OPENSSL_PATH)/lib -I$(OPENSSL_PATH)/include
+	# OSX with homebrew
+	OPENSSL_DIR ?= /usr/local/opt/openssl
+else
+	OPENSSL_DIR ?= /usr
 endif
+CFLAGS_EXTRA += -L${OPENSSL_DIR}/lib -I${OPENSSL_DIR}/include
 
 all: compile
 
