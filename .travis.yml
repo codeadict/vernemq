@@ -26,20 +26,24 @@ before_install:
     - |
       if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
         brew update
+        brew install memcached redis mongodb mysql
+        mysql_install_db --verbose --user=`whoami` --basedir="$(brew --prefix mysql)" --datadir=/usr/local/var/mysql --tmpdir=/tmp
+        # Start the services
+        brew services start mysql
+        brew services start redis
+        brew services start memcached
+        brew services start mongodb
         brew install erlang
         brew install openssl && brew link openssl
         export PATH="/usr/local/opt/openssl/bin:$PATH"
         brew outdated cmake || brew upgrade cmake
       fi
-    - |
-      if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then 
-       mysql -e "CREATE DATABASE vmq_test_database;" -uroot
-       mysql -e "CREATE USER 'vmq_test_user' IDENTIFIED BY 'vmq_test_password';" -uroot
-       mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'vmq_test_user';" -uroot
-       psql -c "CREATE DATABASE vmq_test_database;" -U postgres
-       psql -c "CREATE USER vmq_test_user WITH PASSWORD 'vmq_test_password';" -U postgres
-       psql -c "GRANT ALL PRIVILEGES ON DATABASE vmq_test_database to vmq_test_user;" -U postgres  
-      fi  
+    - mysql -e "CREATE DATABASE vmq_test_database;" -uroot
+    - mysql -e "CREATE USER 'vmq_test_user' IDENTIFIED BY 'vmq_test_password';" -uroot
+    - mysql -e "GRANT ALL PRIVILEGES ON * . * TO 'vmq_test_user';" -uroot
+    - psql -c "CREATE DATABASE vmq_test_database;" -U postgres
+    - psql -c "CREATE USER vmq_test_user WITH PASSWORD 'vmq_test_password';" -U postgres
+    - psql -c "GRANT ALL PRIVILEGES ON DATABASE vmq_test_database to vmq_test_user;" -U postgres
 
 before_script: "epmd -daemon"
 script: " ./rebar3 as all_tests do eunit, ct"
