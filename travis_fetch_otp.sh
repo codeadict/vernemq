@@ -7,7 +7,6 @@ set -eu -o pipefail
 
 osx() { [[ "$TRAVIS_OS_NAME" == "osx" ]]; }
 linux() { [[ "$TRAVIS_OS_NAME" == "linux" ]]; }
-if osx; then brew update && brew install gcc5; fi
 
 if [ -e "$HOME/otp/$TRAVIS_OTP_RELEASE/activate" ]; then exit 0; fi
 
