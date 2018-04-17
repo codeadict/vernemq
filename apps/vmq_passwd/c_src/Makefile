@@ -1,9 +1,13 @@
-CC?=gcc
+CC? = gcc
+CFLAGS_EXTRA =
 
-OPENSSL_PATH=$(shell which openssl)/../..
-CFLAGS=-L$(OPENSSL_PATH)/lib -I$(OPENSSL_PATH)/include
+
+ifeq ($(shell uname -s), Darwin)
+	OPENSSL_PATH = $(shell which openssl)/../..
+	CFLAGS_EXTRA += -L$(OPENSSL_PATH)/lib -I$(OPENSSL_PATH)/include
+endif
 
 all: compile
 
 compile:
-	$(CC) $(CFLAGS) vmq_passwd.c -lcrypto -o ../priv/vmq_passwd
+	$(CC) $(CFLAGS) $(CFLAGS_EXTRA) vmq_passwd.c -lcrypto -o ../priv/vmq_passwd

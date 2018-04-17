@@ -27,7 +27,8 @@ before_install:
       if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
         brew update
         brew install erlang
-        brew outdated openssl || brew upgrade openssl || brew link openssl
+        brew outdated openssl || brew upgrade openssl
+        brew link openssl
         brew outdated cmake || brew upgrade cmake
       fi
     - |
@@ -41,4 +42,4 @@ before_install:
       fi  
 
 before_script: "epmd -daemon"
-script: "./rebar3 as all_tests do eunit, ct"
+script: " ./rebar3 as all_tests do eunit, ct"
