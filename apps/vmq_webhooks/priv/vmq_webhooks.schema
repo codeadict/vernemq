@@ -41,6 +41,15 @@
                                                                             hidden
                                                                            ]}.
 
+%% @doc Control if the payload would be sent to the endpoint.
+{mapping, "vmq_webhooks.$name.send_payload", "vmq_webhooks.user_webhooks", [
+                                                                            {datatype, flag},
+                                                                            {default, on},
+                                                                            {commented, "false"},
+                                                                            {include_default, "webhook1"},
+                                                                            hidden
+                                                                           ]}.
+
 {translation,
  "vmq_webhooks.user_webhooks",
  fun(Conf) ->
@@ -57,9 +66,10 @@
                 #{
                   hook => cuttlefish:conf_get("vmq_webhooks." ++ SortName ++ ".hook", Conf, undefined),
                   endpoint => cuttlefish:conf_get("vmq_webhooks." ++ SortName ++ ".endpoint", Conf, undefined),
-                  options => 
-                      #{ base64_payload =>
-                             cuttlefish:conf_get("vmq_webhooks." ++ SortName ++ ".base64encode", Conf, true)
+                  options =>
+                      #{
+                        send_payload => cuttlefish:conf_get("vmq_webhooks." ++ SortName ++ ".send_payload", Conf, true),
+                        base64_payload => cuttlefish:conf_get("vmq_webhooks." ++ SortName ++ ".base64encode", Conf, true)
                        }
                  }}
                || SortName <- HookNames ],
@@ -90,8 +100,8 @@
   hidden,
   {default, 100}]}.
 
-%% @doc Configure the timeout that we keep the connection alive in the 
-%% webhooks connection pool, expressed in milliseconds. 
+%% @doc Configure the timeout that we keep the connection alive in the
+%% webhooks connection pool, expressed in milliseconds.
 {mapping, "vmq_webhooks.pool_timeout", "vmq_webhooks.pool_timeout",
  [{datatype, integer},
   hidden,
