@@ -63,7 +63,7 @@ status_cmd() ->
     Cmd = ["vmq-admin", "webhooks", "show"],
     Callback =
         fun(_, [], []) ->
-                Table = 
+                Table =
                     [[{hook, Hook}, {endpoint, binary_to_list(Endpoint)},
                       {base64payload, b64opt(Opts)}] ||
                         {Hook, Endpoints} <- vmq_webhooks_plugin:all_hooks(),
@@ -113,7 +113,7 @@ get_opts(Flags) ->
     Keys = [base64_payload],
     maps:merge(Defaults, maps:with(Keys, maps:from_list(Flags))).
 
-deregister_cmd() -> 
+deregister_cmd() ->
     Cmd = ["vmq-admin", "webhooks", "deregister"],
     KeySpecs = [hook_keyspec(), endpoint_keyspec()],
     FlagSpecs = [],
@@ -194,6 +194,9 @@ register_usage() ->
      "\n\n"
      "  --base64payload=<true|false>\n",
      "     base64 encode the MQTT payload. Defaults to true.",
+     "\n\n"
+     "  --omitpayload=<true|false>\n",
+     "     omit sending the payload to the webhook endpoint. Default to false.",
      "\n\n"
     ].
 
