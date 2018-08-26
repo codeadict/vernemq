@@ -42,9 +42,9 @@
                                                                            ]}.
 
 %% @doc Control if the payload would be sent to the endpoint.
-{mapping, "vmq_webhooks.$name.send_payload", "vmq_webhooks.user_webhooks", [
+{mapping, "vmq_webhooks.$name.omit_payload", "vmq_webhooks.user_webhooks", [
                                                                             {datatype, flag},
-                                                                            {default, on},
+                                                                            {default, off},
                                                                             {commented, "false"},
                                                                             {include_default, "webhook1"},
                                                                             hidden
