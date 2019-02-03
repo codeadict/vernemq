@@ -163,6 +163,7 @@ $(function() {
                     return node;
                 });
                 version_check(nodes, cluster_issues);
+                console.log(nodes);
                 config.cluster_status.last_calculated = now;
                 var output = Mustache.render(config.template, {nodes: nodes, cluster_size: cluster_size, cluster_issues: cluster_issues, total: total});
 
