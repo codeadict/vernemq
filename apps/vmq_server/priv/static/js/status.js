@@ -128,6 +128,7 @@ $(function() {
                 var cluster_size = 0;
                 var cluster_issues = [];
                 nodes = $.map(response, function(node_data, index) {
+                    console.log(node_data);
                     node_name = Object.keys(node_data)[index];
                     var this_node = node_data[node_name];
                     var rate_interval = (now - config.cluster_status.last_calculated) / 1000;
@@ -136,7 +137,7 @@ $(function() {
                     var msg_out_rate = calc_rate(node_name, "msg_out", rate_interval, this_node.msg_out)
                     var msg_drop_rate = calc_rate(node_name, "queue_drop", rate_interval, this_node.msg_drop)
                     var cluster_view = calc_cluster_view(node_name, this_node.mystatus, cluster_issues);
-                    var node = {
+                    var n = {
                         node: node_name,
                         clients_online: this_node.num_online,
                         clients_offline: this_node.num_offline,
@@ -153,14 +154,14 @@ $(function() {
                     };
                     listener_check(node_name, this_node.listeners, cluster_view, cluster_issues);
                     cluster_size = Math.max(cluster_size, cluster_view.num_nodes);
-                    total.clients_online += node.clients_online;
-                    total.clients_offline += node.clients_offline;
-                    total.connect_rate += node.connect_rate;
-                    total.msg_in_rate += node.msg_in_rate;
-                    total.msg_out_rate += node.msg_out_rate;
-                    total.msg_drop_rate += node.msg_drop_rate;
-                    total.msg_queued += node.msg_queued;
-                    return node;
+                    total.clients_online += n.clients_online;
+                    total.clients_offline += n.clients_offline;
+                    total.connect_rate += n.connect_rate;
+                    total.msg_in_rate += n.msg_in_rate;
+                    total.msg_out_rate += n.msg_out_rate;
+                    total.msg_drop_rate += n.msg_drop_rate;
+                    total.msg_queued += n.msg_queued;
+                    return (n);
                 });
                 version_check(nodes, cluster_issues);
                 console.log(nodes);
