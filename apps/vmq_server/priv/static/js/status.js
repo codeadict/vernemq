@@ -128,7 +128,7 @@ $(function() {
                 var cluster_size = 0;
                 var cluster_issues = [];
                 nodes = $.map(response, function(node_data, index) {
-                    node_name = Object.keys(node_data)[0];
+                    node_name = Object.keys(node_data)[index];
                     var this_node = node_data[node_name];
                     var rate_interval = (now - config.cluster_status.last_calculated) / 1000;
                     var connect_rate = calc_rate(node_name, "connect", rate_interval, this_node.num_online)
