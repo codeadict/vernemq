@@ -353,6 +353,29 @@
          Term
  end}.
 
+%% @doc Sets cors allowe origins.
+{mapping, "http.cors.allowed_origins", "vmq_server.http_cors_allowed_origins", [
+    {datatype, [string, {enum, [none]}]},
+    {default, none},
+    {include_default, none}
+]}.
+{translation, "vmq_server.http_cors_allowed_origins",
+ fun(Conf) ->
+         case cuttlefish:conf_get("http.cors.allowed_origins", Conf) of
+             none -> 
+                [];
+             Val ->
+                {ok, Origins} = vmq_schema:parse_list_to_term(Val),
+                Origins             
+         end
+ end}.
+
+%% @doc  Sets cors max age.
+{mapping, "http.cors.max_age", "vmq_server.cors_max_age", 
+ [{datatype, integer},
+  {validators, ["non_negative_integer"]}
+]}.
+
 %% @doc listener.tcp.buffer_sizes is an list of three integers
 %% (sndbuf,recbuf,buffer) specifying respectively the kernel TCP send
 %% buffer, the kernel TCP receive buffer and the user-level buffer
