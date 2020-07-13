@@ -359,6 +359,7 @@
     {default, none},
     {include_default, none}
 ]}.
+
 {translation, "vmq_server.http_cors_allowed_origins",
  fun(Conf) ->
          case cuttlefish:conf_get("http.cors.allowed_origins", Conf) of
@@ -373,6 +374,7 @@
 %% @doc  Sets cors max age.
 {mapping, "http.cors.max_age", "vmq_server.cors_max_age", 
  [{datatype, integer},
+  {default, 1800},
   {validators, ["non_negative_integer"]}
 ]}.
 
