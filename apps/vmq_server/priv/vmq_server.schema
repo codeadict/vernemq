@@ -353,7 +353,7 @@
          Term
  end}.
 
-%% @doc Sets cors allowe origins.
+%% @doc Sets CORS allowed origins that can access resources. Use "*" to allow all domains.
 {mapping, "http.cors.allowed_origins", "vmq_server.http_cors_allowed_origins", [
     {datatype, [string, {enum, [none]}]},
     {default, none},
@@ -371,7 +371,7 @@
          end
  end}.
 
-%% @doc  Sets cors max age.
+%% @doc Indicates for how many seconds the results of a preflight request can be cached (to be set in access-control-max-age header).
 {mapping, "http.cors.max_age", "vmq_server.cors_max_age", 
  [{datatype, integer},
   {default, 1800},
