@@ -16,6 +16,8 @@
 
 -export([set_cors_headers/1]).
 
+-define(DEFAULT_ACCESS_CONTROL_MAX_AGE, 30 * 60). %% 30 minutes
+
 %% CORS Documentation:
 %% * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 %% * https://tools.ietf.org/html/rfc6454
@@ -39,7 +41,7 @@ set_cors_headers(Req) ->
 get_cors_options_headers(Req) ->
     case cowboy_req:method(Req) of
         <<"OPTIONS">> ->
-            MaxAge = application:get_env(vmq_server, http_cors_max_age, 1728000),
+            MaxAge = application:get_env(vmq_server, http_cors_max_age, ?DEFAULT_ACCESS_CONTROL_MAX_AGE),
             AllowedHeaders = <<"content-type, authorization">>,
             #{
                 <<"access-control-max-age">> => integer_to_list(MaxAge),
