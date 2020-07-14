@@ -36,7 +36,7 @@
 %%% Cowboy REST Handler
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 init(Req, Opts) ->
-    {cowboy_rest, set_cors_headers:set_cors_headers(Req), Opts}.
+    {cowboy_rest, vmq_http_security:set_cors_headers(Req), Opts}.
 
 allowed_methods(Req, State) ->
     {[<<"GET">>, <<"OPTIONS">>, <<"HEAD">>], Req, State}.
