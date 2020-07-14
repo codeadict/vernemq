@@ -1,5 +1,7 @@
 -module(vmq_http_SUITE).
 
+-include_lib("eunit/include/eunit.hrl").
+
 %% CT exports
 -export([
          init_per_suite/1,
@@ -76,11 +78,13 @@ simple_healthcheck_test(_) ->
 %% ============================================================
 
 cors_returned_on_get_request(_) ->
+    application:set_env(vmq_server, http_cors_allowed_origins, ["remote.com"]),
     vmq_server_cmd:listener_start(8888, [{http, true},
                                          {config_mod, vmq_http_mgmt_api},
                                          {config_fun, routes}]),
     application:ensure_all_started(inets),
     Endpoint = ?HTTP_HOST ++ "/api/v1/cluster/show",
     ReqHeaders = [{"origin", "remote.com"}],
-    {ok, {_Status, RespHeaders, _Body}} = httpc:request(get, {Endpoint, ReqHeaders}),
-    "example.com" = proplists:get_value("access-control-allow-origin", RespHeaders).
+    {ok, {Status, RespHeaders, _Body}} = httpc:request(get, {Endpoint, ReqHeaders}, [], []),
+    ?assertEqual(200, Status),
+    ?assertEqual("origin", proplists:get_value("vary", RespHeaders)).
