@@ -56,7 +56,7 @@ get_cors_origin(Req) ->
         undefined -> undefined;
         <<"null">> -> undefined;
         Origin ->
-            AllowList = application:get_env(vmq_server, http_cors_allowlist, []),
+            AllowList = application:get_env(vmq_server, http_cors_allowed_origins, []),
             case lists:member(erlang:binary_to_list(Origin), AllowList) of
                 true ->
                     Origin;
