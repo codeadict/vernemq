@@ -16,7 +16,8 @@
 
 -export([set_cors_headers/1]).
 
--define(DEFAULT_ACCESS_CONTROL_MAX_AGE, 30 * 60). %% 30 minutes
+%% 30 minutes
+-define(DEFAULT_ACCESS_CONTROL_MAX_AGE, 30 * 60).
 -define(DEFAULT_ALLOWED_HEADERS, <<"content-type, authorization">>).
 
 %% CORS Documentation:
@@ -42,19 +43,25 @@ set_cors_headers(Req) ->
 get_cors_options_headers(Req) ->
     case cowboy_req:method(Req) of
         <<"OPTIONS">> ->
-            MaxAge = application:get_env(vmq_server, http_cors_max_age, ?DEFAULT_ACCESS_CONTROL_MAX_AGE),
+            MaxAge = application:get_env(
+                vmq_server,
+                http_cors_max_age,
+                ?DEFAULT_ACCESS_CONTROL_MAX_AGE
+            ),
             #{
                 <<"access-control-max-age">> => integer_to_list(MaxAge),
-                <<"access-control-allow-headers">> => ?DEFAULT_ALLOWED_HEADERS 
+                <<"access-control-allow-headers">> => ?DEFAULT_ALLOWED_HEADERS
             };
-        _Method->
+        _Method ->
             #{}
     end.
 
 get_cors_origin(Req) ->
     case cowboy_req:header(<<"origin">>, Req) of
-        undefined -> undefined;
-        <<"null">> -> undefined;
+        undefined ->
+            undefined;
+        <<"null">> ->
+            undefined;
         Origin ->
             AllowList = application:get_env(vmq_server, http_cors_allowed_origins, []),
             case lists:member(erlang:binary_to_list(Origin), AllowList) of
